@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const bodyParser  =  require("body-parser")
-const {Product} = require("./product")
-app.use(express.static('public'));
-app.use(bodyParser.json())
+const bodyParser = require("body-parser");
+const { Product } = require("./product");
+app.use(express.static("public"));
+app.use(bodyParser.json());
 
 const list = [
   {
@@ -88,10 +88,20 @@ const list = [
   },
 ];
 
-app.get("/list" , (req , res) => {
-    Product.find({})
-    .then(products => res.send({success : true , products}))
-    .catch(error => res.send({success : false , message : error}))
-})
+app.get("/list/:page?", (req, res) => {
+  const page = req.params.page;
+  const recordPerPage = 3;
+  if (page === undefined) {
+    Product.find()
+      .then((products) => res.send({ success: true, products }))
+      .catch((error) => res.send({ success: false, message: error }));
+  } else {
+    Product.find()
+      .limit(recordPerPage)
+      .skip(page * recordPerPage)
+      .then((products) => res.send({ success: true, products }))
+      .catch((error) => res.send({ success: false, message: error }));
+  }
+});
 
-app.listen(process.env.PORT || "3000",() => console.log("Server started"))
+app.listen(process.env.PORT || "3000", () => console.log("Server started"));
