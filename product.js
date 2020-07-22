@@ -3,9 +3,25 @@ mongoose.connect('mongodb+srv://root:root@cluster0.zfu2x.mongodb.net/phoneshop?r
 
 const Product = mongoose.model('Product', 
 { 
-    name: String ,
-    price: Number,
-    img: String
+    name: {
+        type: String,
+        require: true,
+        trim: true,
+        unique: true
+    } ,
+    price: {
+        type: Number,
+        require: true,
+        trim: true,
+    },
+    quantity: {
+        type: Number,
+        require: true,
+    },
+    img: {
+        type: String,
+        trim: true,
+    }
 });
 
 module.exports = {Product}
@@ -24,3 +40,8 @@ module.exports = {Product}
 // sp3.save()
 // .then(res => console.log(res))
 // .catch(err => console.log(err))
+
+// const text = 'samsung'
+// Product.find({name: new RegExp('\\b' + text + '\\b', 'i')})
+// .then(res=>console.log(res))
+// .catch(err=>console.log(err))

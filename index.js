@@ -104,4 +104,18 @@ app.get("/list/:page?", (req, res) => {
   }
 });
 
+app.get("/list_search/:name?", (req, res) => {
+  const name = req.params.name;
+  //console.log(name)
+  if(name === undefined) {
+    Product.find()
+    .then((products) => res.send({ success: true, products }))
+    .catch((error) => res.send({ success: false, message: error }));
+  } else {
+    Product.find({ name: new RegExp("\\b" + name + "\\b", "i") })
+    .then((products) => res.send({ success: true, products }))
+    .catch((error) => res.send({ success: false, message: error }));
+  }
+});
+
 app.listen(process.env.PORT || "3000", () => console.log("Server started"));
